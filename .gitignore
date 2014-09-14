@@ -1,0 +1,9 @@
+# Compiled Object files
+
+
+#build trash
+Build/VC9/*.ncb
+Build/VC9/*.suo
+Build/VC9/*.user
+Build/VC9/Debug/*
+Build/VC9/Release/*
