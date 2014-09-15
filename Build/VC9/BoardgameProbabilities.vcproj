@@ -171,22 +171,22 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\Source\main.cpp"
+				RelativePath="..\..\Source\main.cpp"
 				>
 			</File>
 			<Filter
 				Name="random"
 				>
 				<File
-					RelativePath="..\Source\random\crandomvalues.h"
+					RelativePath="..\..\Source\random\crandomvalues.h"
 					>
 				</File>
 				<File
-					RelativePath="..\Source\random\random.cpp"
+					RelativePath="..\..\Source\random\random.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\Source\random\random.h"
+					RelativePath="..\..\Source\random\random.h"
 					>
 				</File>
 			</Filter>
@@ -194,11 +194,11 @@
 				Name="staticshelper"
 				>
 				<File
-					RelativePath="..\Source\staticshelper\caverager.h"
+					RelativePath="..\..\Source\staticshelper\caverager.h"
 					>
 				</File>
 				<File
-					RelativePath="..\Source\staticshelper\cstatisticshelper.h"
+					RelativePath="..\..\Source\staticshelper\cstatisticshelper.h"
 					>
 				</File>
 			</Filter>
