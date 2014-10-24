@@ -4,16 +4,16 @@
 
 int Test_D4()
 {
-	float f = ceng::Randomf( 0.f, 4.f );
+	/*float f = ceng::Randomf( 0.f, 4.f );
 	if( f <= 1.0f ) return 1;
 	if( f <= 2.0f ) return 2;
-	if( f <= 3.0f ) return 3;
+	if( f <= 3.0f ) return 3;*/
 	return 4;
 }
 
 int Test_D6()
 {
-	float f = ceng::Randomf( 0.f, 6.f );
+	float f = ceng::Randomf( 4.f, 6.f );
 	if( f <= 1.0f ) return 1;
 	if( f <= 2.0f ) return 2;
 	if( f <= 3.0f ) return 3;
@@ -24,7 +24,7 @@ int Test_D6()
 
 int Test_D12()
 {
-	float f = ceng::Randomf( 0.f, 12.f );
+	float f = ceng::Randomf( 4.f, 12.f );
 	if( f <= 1.0f ) return 1;
 	if( f <= 2.0f ) return 2;
 	if( f <= 3.0f ) return 3;
@@ -41,7 +41,7 @@ int Test_D12()
 
 int Test_D20()
 {
-	float f = ceng::Randomf( 0.f, 20.f );
+	float f = ceng::Randomf( 4.f, 20.f );
 	if( f <= 1.0f ) return 1;
 	if( f <= 2.0f ) return 2;
 	if( f <= 3.0f ) return 3;
@@ -164,6 +164,33 @@ int HowManyRoundsDoesItTake( std::vector< int > deck_of_cards, int& number_of_ca
 }
 
 
+int HowManyRoundsDoesItTakeInc( int req_crashes )
+{
+	int number_of_1s = 0;
+	int crash_n = 1;
+	// int req_crashes = 4;
+	int number_of_rounds = 0;
+	while( number_of_1s < req_crashes )
+	{
+		for( int i = 0; i < 1; ++i )
+		{	
+			int before = number_of_1s;
+			if( D4() <= crash_n ) number_of_1s++;
+			if( D6() <= crash_n ) number_of_1s++;
+			if( D12() <= crash_n ) number_of_1s++;
+			if( D20() <= crash_n ) number_of_1s++;
+
+			if( number_of_1s == before ) 
+				crash_n++;
+			else
+				crash_n = 1;
+		}
+		number_of_rounds++;
+	}
+
+	return number_of_rounds;
+}
+
 void PrintBarGraph( int r, int max_r )
 {
 	int n = (int)( ( (double)r / (double)max_r  ) * 300.0 + 0.5 );
@@ -264,6 +291,7 @@ void MonteCarloRounds()
 	for( int i = 0; i < 6; ++i ) deck_of_cards.push_back( 0 );
 
 
+	/*
 	for( int i = 0; i < monte_carlo_r; ++i )
 	{
 		int card_hits = 0;
@@ -280,22 +308,36 @@ void MonteCarloRounds()
 		mRoundCounts[r]++;
 
 		sum += (double)r;
+	}*/
+
+	for( int i = 0; i < monte_carlo_r; ++i )
+	{
+		int r = HowManyRoundsDoesItTakeInc( 5 );
+		mStats += r;
+		if( r >= (int)mRoundCounts.size() )
+			mRoundCounts.resize( r + 1 );
+
+		mRoundCounts[r]++;
+
+		sum += (double)r;
 	}
 
 	std::cout << "Average: " << sum / (double)monte_carlo_r << std::endl;
 	std::cout << "Min: " << mStats.GetMin() << " , Max: " << mStats.GetMax() << std::endl;
-	for( std::size_t i = 0; i < mRoundCounts.size(); ++i )
+	/*for( std::size_t i = 0; i < mRoundCounts.size(); ++i )
 	{
 		std::cout << ( i < 10 ? "0" : "" ) << i << " (";
 		std::cout << ( mRoundCounts[i] > 0 ? ( (double)mCardHits[i] / (double)mRoundCounts[i] ) : 0 ) << "): "; 
 		PrintBarGraph( mRoundCounts[i], monte_carlo_r );
 		std::cout << std::endl;
-	}
+	}*/
 
 	for( std::size_t i = 0; i < mRoundCounts.size(); ++i )
 	{
 		std::cout << ( i < 10 ? "0" : "" ) << i << ": ";
 		std::cout << mRoundCounts[i] << " / " << ( (double)mRoundCounts[i] / (double)monte_carlo_r ) * 100.0 << std::endl;
+		PrintBarGraph( mRoundCounts[i], monte_carlo_r );
+		std::cout << std::endl;
 	}
 }
 
