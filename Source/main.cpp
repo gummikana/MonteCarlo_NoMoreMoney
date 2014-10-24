@@ -277,7 +277,7 @@ void Prob_HowOftenOneAppears()
 	std::cout << "Crash this round: " <<  ((double)how_many_1s / (double)monte_carlo_r) * 100.0 << "%" << std::endl;
 }
 
-void MonteCarloRounds()
+void MonteCarloRounds_WithCards( int round_nums )
 {
 	int monte_carlo_r = 1000000;
 
@@ -287,15 +287,14 @@ void MonteCarloRounds()
 
 	std::vector< int > deck_of_cards;
 	std::vector< int > mCardHits( 15 );
-	for( int i = 0; i < 5; ++i ) deck_of_cards.push_back( 1 );
+	for( int i = 0; i < round_nums; ++i ) deck_of_cards.push_back( 1 );
 	for( int i = 0; i < 6; ++i ) deck_of_cards.push_back( 0 );
+	for( int i = 0; i < 5 - round_nums; ++i ) deck_of_cards.push_back( 0 );
 
-
-	/*
 	for( int i = 0; i < monte_carlo_r; ++i )
 	{
 		int card_hits = 0;
-		int r = HowManyRoundsDoesItTake( deck_of_cards, card_hits, 5 );
+		int r = HowManyRoundsDoesItTake( deck_of_cards, card_hits, round_nums );
 		mStats += r;
 		if( r >= (int)mRoundCounts.size() )
 			mRoundCounts.resize( r + 1 );
@@ -308,7 +307,68 @@ void MonteCarloRounds()
 		mRoundCounts[r]++;
 
 		sum += (double)r;
+	}
+
+	
+	std::cout << "Average: " << sum / (double)monte_carlo_r << std::endl;
+	std::cout << "Min: " << mStats.GetMin() << " , Max: " << mStats.GetMax() << std::endl;
+	/*for( std::size_t i = 0; i < mRoundCounts.size(); ++i )
+	{
+		std::cout << ( i < 10 ? "0" : "" ) << i << " (";
+		std::cout << ( mRoundCounts[i] > 0 ? ( (double)mCardHits[i] / (double)mRoundCounts[i] ) : 0 ) << "): "; 
+		PrintBarGraph( mRoundCounts[i], monte_carlo_r );
+		std::cout << std::endl;
 	}*/
+
+	for( std::size_t i = 0; i < mRoundCounts.size(); ++i )
+	{
+		std::cout << ( i < 10 ? "0" : "" ) << i << ": ";
+		std::cout << mRoundCounts[i] << " / " << ( (double)mRoundCounts[i] / (double)monte_carlo_r ) * 100.0 << std::endl;
+		PrintBarGraph( mRoundCounts[i], monte_carlo_r );
+		std::cout << std::endl;
+	}
+}
+
+
+void MonteCarloRounds_StandardGame( int round_nums )
+{
+	int monte_carlo_r = 1000000;
+
+	double sum = 0;
+	std::vector< int > mRoundCounts( 15 );
+	ceng::math::CStatisticsHelper< int > mStats;
+
+	for( int i = 0; i < monte_carlo_r; ++i )
+	{
+		int card_hits = 0;
+		int r = HowManyRoundsDoesItTake( round_nums );
+		mStats += r;
+		if( r >= (int)mRoundCounts.size() )
+			mRoundCounts.resize( r + 1 );
+		mRoundCounts[r]++;
+
+		sum += (double)r;
+	}
+
+	std::cout << "Average: " << sum / (double)monte_carlo_r << std::endl;
+	std::cout << "Min: " << mStats.GetMin() << " , Max: " << mStats.GetMax() << std::endl;
+	for( std::size_t i = 0; i < mRoundCounts.size(); ++i )
+	{
+		std::cout << ( i < 10 ? "0" : "" ) << i << ": "; 
+		std::cout << mRoundCounts[i] << " / " << ( (double)mRoundCounts[i] / (double)monte_carlo_r ) * 100.0 << std::endl;
+		PrintBarGraph( mRoundCounts[i], monte_carlo_r );
+		std::cout << std::endl;
+	}
+}
+
+
+void MonteCarloRounds_WithIncrease( int round_nums )
+{
+	int monte_carlo_r = 1000000;
+
+	double sum = 0;
+	std::vector< int > mRoundCounts( 15 );
+	ceng::math::CStatisticsHelper< int > mStats;
 
 	for( int i = 0; i < monte_carlo_r; ++i )
 	{
@@ -341,43 +401,24 @@ void MonteCarloRounds()
 	}
 }
 
-
-void MonteCarloRounds_StandardGame()
-{
-	int monte_carlo_r = 1000000;
-
-	double sum = 0;
-	std::vector< int > mRoundCounts( 15 );
-	ceng::math::CStatisticsHelper< int > mStats;
-
-	for( int i = 0; i < monte_carlo_r; ++i )
-	{
-		int card_hits = 0;
-		int r = HowManyRoundsDoesItTake( 5 );
-		mStats += r;
-		if( r >= (int)mRoundCounts.size() )
-			mRoundCounts.resize( r + 1 );
-		mRoundCounts[r]++;
-
-		sum += (double)r;
-	}
-
-	std::cout << "Average: " << sum / (double)monte_carlo_r << std::endl;
-	std::cout << "Min: " << mStats.GetMin() << " , Max: " << mStats.GetMax() << std::endl;
-	for( std::size_t i = 0; i < mRoundCounts.size(); ++i )
-	{
-		std::cout << ( i < 10 ? "0" : "" ) << i << ": "; 
-		PrintBarGraph( mRoundCounts[i], monte_carlo_r );
-		std::cout << std::endl;
-	}
-}
-
-
 int main( int argc, char** args )
 {
 	Prob_HowOftenOneAppears();
-	// MonteCarloRounds_StandardGame();
-	MonteCarloRounds();
+
+	for( int r = 4; r <= 5; ++r )
+	{
+		std::cout << r << " round game - Standard" << std::endl <<   "=========================" << std::endl;
+		MonteCarloRounds_StandardGame( r );
+		std::cout << std::endl;
+
+		std::cout << r << " round game - With cards" << std::endl <<   "===========================" << std::endl;
+		MonteCarloRounds_WithCards( r );
+		std::cout << std::endl;
+
+		std::cout << r << " round game - With increased crash changes" << std::endl <<   "=================================" << std::endl;
+		MonteCarloRounds_WithIncrease( r );
+		std::cout << std::endl;
+	}
 
 	return 0;
 }
