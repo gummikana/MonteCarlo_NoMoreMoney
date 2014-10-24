@@ -137,10 +137,10 @@ int DrawACard( std::vector< int >& deck_of_cards )
 	return result;
 }
 
-int HowManyRoundsDoesItTake( std::vector< int > deck_of_cards, int& number_of_card_hits )
+int HowManyRoundsDoesItTake( std::vector< int > deck_of_cards, int& number_of_card_hits, int req_crashes )
 {
 	int number_of_1s = 0;
-	int req_crashes = 4;
+	// int req_crashes = 4;
 	int number_of_rounds = 0;
 	while( number_of_1s < req_crashes )
 	{
@@ -260,17 +260,21 @@ void MonteCarloRounds()
 
 	std::vector< int > deck_of_cards;
 	std::vector< int > mCardHits( 15 );
-	for( int i = 0; i < 4; ++i ) deck_of_cards.push_back( 1 );
-	for( int i = 0; i < 7; ++i ) deck_of_cards.push_back( 0 );
+	for( int i = 0; i < 5; ++i ) deck_of_cards.push_back( 1 );
+	for( int i = 0; i < 6; ++i ) deck_of_cards.push_back( 0 );
 
 
 	for( int i = 0; i < monte_carlo_r; ++i )
 	{
 		int card_hits = 0;
-		int r = HowManyRoundsDoesItTake( deck_of_cards, card_hits );
+		int r = HowManyRoundsDoesItTake( deck_of_cards, card_hits, 5 );
 		mStats += r;
 		if( r >= (int)mRoundCounts.size() )
 			mRoundCounts.resize( r + 1 );
+
+		if( r >= (int)mCardHits.size() )
+			mCardHits.resize(r + 1);
+
 		mCardHits[r] += card_hits;
 
 		mRoundCounts[r]++;
@@ -291,7 +295,7 @@ void MonteCarloRounds()
 	for( std::size_t i = 0; i < mRoundCounts.size(); ++i )
 	{
 		std::cout << ( i < 10 ? "0" : "" ) << i << ": ";
-		std::cout << mRoundCounts[i] << std::endl;
+		std::cout << mRoundCounts[i] << " / " << ( (double)mRoundCounts[i] / (double)monte_carlo_r ) * 100.0 << std::endl;
 	}
 }
 
@@ -307,7 +311,7 @@ void MonteCarloRounds_StandardGame()
 	for( int i = 0; i < monte_carlo_r; ++i )
 	{
 		int card_hits = 0;
-		int r = HowManyRoundsDoesItTake( 4 );
+		int r = HowManyRoundsDoesItTake( 5 );
 		mStats += r;
 		if( r >= (int)mRoundCounts.size() )
 			mRoundCounts.resize( r + 1 );
@@ -330,8 +334,8 @@ void MonteCarloRounds_StandardGame()
 int main( int argc, char** args )
 {
 	Prob_HowOftenOneAppears();
-	MonteCarloRounds_StandardGame();
-	// MonteCarloRounds();
+	// MonteCarloRounds_StandardGame();
+	MonteCarloRounds();
 
 	return 0;
 }
