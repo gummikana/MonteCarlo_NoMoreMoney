@@ -372,7 +372,7 @@ void MonteCarloRounds_WithIncrease( int round_nums )
 
 	for( int i = 0; i < monte_carlo_r; ++i )
 	{
-		int r = HowManyRoundsDoesItTakeInc( 5 );
+		int r = HowManyRoundsDoesItTakeInc( round_nums );
 		mStats += r;
 		if( r >= (int)mRoundCounts.size() )
 			mRoundCounts.resize( r + 1 );
@@ -403,7 +403,7 @@ void MonteCarloRounds_WithIncrease( int round_nums )
 
 int main( int argc, char** args )
 {
-	Prob_HowOftenOneAppears();
+	// Prob_HowOftenOneAppears();
 
 	for( int r = 4; r <= 5; ++r )
 	{
