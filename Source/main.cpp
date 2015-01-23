@@ -2,68 +2,6 @@
 #include "random/random.h"
 #include "staticshelper/cstatisticshelper.h"
 
-int Test_D4()
-{
-	/*float f = ceng::Randomf( 0.f, 4.f );
-	if( f <= 1.0f ) return 1;
-	if( f <= 2.0f ) return 2;
-	if( f <= 3.0f ) return 3;*/
-	return 4;
-}
-
-int Test_D6()
-{
-	float f = ceng::Randomf( 4.f, 6.f );
-	if( f <= 1.0f ) return 1;
-	if( f <= 2.0f ) return 2;
-	if( f <= 3.0f ) return 3;
-	if( f <= 4.0f ) return 4;
-	if( f <= 5.0f ) return 5;
-	return 6;
-}
-
-int Test_D12()
-{
-	float f = ceng::Randomf( 4.f, 12.f );
-	if( f <= 1.0f ) return 1;
-	if( f <= 2.0f ) return 2;
-	if( f <= 3.0f ) return 3;
-	if( f <= 4.0f ) return 4;
-	if( f <= 5.0f ) return 5;
-	if( f <= 6.0f ) return 6;
-	if( f <= 7.0f ) return 7;
-	if( f <= 8.0f ) return 8;
-	if( f <= 9.0f ) return 9;
-	if( f <= 10.0f ) return 10;
-	if( f <= 11.0f ) return 11;
-	return 12;
-}
-
-int Test_D20()
-{
-	float f = ceng::Randomf( 4.f, 20.f );
-	if( f <= 1.0f ) return 1;
-	if( f <= 2.0f ) return 2;
-	if( f <= 3.0f ) return 3;
-	if( f <= 4.0f ) return 4;
-	if( f <= 5.0f ) return 5;
-	if( f <= 6.0f ) return 6;
-	if( f <= 7.0f ) return 7;
-	if( f <= 8.0f ) return 8;
-	if( f <= 9.0f ) return 9;
-	if( f <= 10.0f ) return 10;
-	if( f <= 11.0f ) return 11;
-	if( f <= 12.0f ) return 12;
-	if( f <= 13.0f ) return 13;
-	if( f <= 14.0f ) return 14;
-	if( f <= 15.0f ) return 15;
-	if( f <= 16.0f ) return 16;
-	if( f <= 17.0f ) return 17;
-	if( f <= 18.0f ) return 18;
-	if( f <= 19.0f ) return 19;
-	return 20;
-}
-
 
 int D4() { return ceng::Random( 1, 4 ); }
 int D6() { return ceng::Random( 1, 6 ); }
@@ -79,13 +17,7 @@ int Reroll_D6() { int d6 = ceng::Random( 1, 6 ); while( d6 == 6 ) d6 = ceng::Ran
 int Reroll_D12() { int d12 = ceng::Random( 1, 12 ); while( d12 == 12 ) d12 = ceng::Random( 1, 12 ); return d12; }
 int Reroll_D20() { int d20 = ceng::Random( 1, 20 ); while( d20 == 20 ) d20 = ceng::Random( 1, 20 ); return d20; }
 
-/*
-int D6() { return ceng::Random( 1, 6 ); }
-int D8() { return ceng::Random( 1, 8 ); }
-int D10() { return ceng::Random( 1, 10 ); }
-int D12() { return ceng::Random( 1, 12 ); }
-int D20() { return ceng::Random( 1, 20 ); }
-*/
+
 
 // --- no more money ---
 
@@ -341,7 +273,7 @@ void MonteCarloRounds_StandardGame( int round_nums )
 	for( int i = 0; i < monte_carlo_r; ++i )
 	{
 		int card_hits = 0;
-		int r = HowManyRoundsDoesItTake( round_nums );
+		int r = HowManyRoundsDoesItTake_NoRerolls( round_nums );
 		mStats += r;
 		if( r >= (int)mRoundCounts.size() )
 			mRoundCounts.resize( r + 1 );
